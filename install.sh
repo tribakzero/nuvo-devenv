@@ -24,8 +24,8 @@ echo "${DEFAULT_COLOR}"
 
 echo "Installing brew:\n"
 
-# Copied block from https://brew.sh/
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Copied block from https://brew.sh/ Added "< /dev/null" to make it non-interactive
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/null
 # / copied block
 
 echo "Running post-install commands...\n"
@@ -42,6 +42,8 @@ else
     echo "${RED_COLOR}Couldn't confirm that Homebrew got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
     exit
 fi
+
+: '
 
 echo "There are a lot of IDEs, here we have some for you to pick."
 
@@ -87,7 +89,7 @@ do
       break
       ;;
     "None")
-      echo "Sure, let's keep going then"
+      echo "Sure, we will move forward then"
       break
       ;;
     *) echo "invalid option $REPLY";;
@@ -106,11 +108,11 @@ echo "Running service...\n"
 brew services restart postgresql
 # / copied block
 
-if brew services list | grep -q 'postgresql started'
+if brew services list | grep -q "postgresql started"
 then
     echo "${GREEN_COLOR}$(postgres --version) installed successfully and running properly${DEFAULT_COLOR}\n"
 else
-    echo "${RED_COLOR}Couldn't confirm that PostgreSQL got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
+    echo "${RED_COLOR}Could not confirm that PostgreSQL got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
     exit
 fi
 
@@ -123,14 +125,14 @@ brew install rbenv
 echo "Running post-install commands...\n"
 
 # Copied block from brew post-install instructions
-echo 'eval "$(rbenv init -)"' >> ~/.zshrc
+echo "eval \"$(rbenv init -)\"" >> ~/.zshrc
 # / copied block
 
-if rbenv -v | grep -q 'rbenv'
+if rbenv -v | grep -q "rbenv"
 then
     echo "${GREEN_COLOR}$(rbenv -v) installed successfully${DEFAULT_COLOR}\n"
 else
-    echo "${RED_COLOR}Couldn't confirm that rbenv got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
+    echo "${RED_COLOR}Could not confirm that rbenv got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
     exit
 fi
 
@@ -146,11 +148,11 @@ echo "Defaulting to rbenv globally...\n"
 rbenv global 3.0.1
 # / copied block
 
-if rbenv version | grep -q '3.0.1'
+if rbenv version | grep -q "3.0.1"
 then
-    echo "${GREEN_COLOR}Ruby v$(rbenv version | grep '3.0.1' | cut -f1 -d' ') installed and defaulted successfully${DEFAULT_COLOR}\n"
+    echo "${GREEN_COLOR}Ruby v$(rbenv version | grep "3.0.1" | cut -f1 -d" ") installed and defaulted successfully${DEFAULT_COLOR}\n"
 else
-    echo "${RED_COLOR}Couldn't confirm that Ruby got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
+    echo "${RED_COLOR}Could not confirm that Ruby got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
     exit
 fi
 
@@ -167,21 +169,21 @@ On the first screen, select: GitHub.com
 Then select SSH as your preferred protocol
 Upload your SSH public key
 Login with a web browser (will ask you to copy and paste a code into the browser and give some permissions, please accept them)
-Once you're done, close the tab and come back here
+Once you are done, close the tab and come back here
 Finally, press Enter to finish the process.${DEFAULT_COLOR}\n"
 
 # Copied block from https://cli.github.com/manual/
 gh auth login
 # / copied block
 
-printf "Back in control of the process, let's do a simple test to check for GitHub CLI installation.\n"
+printf "Back in control of the process, doing a simple test to check for GitHub CLI installation.\n"
 
 # TODO: This could totally be improved to validate for SSH key properly setup.
-if gh auth status 2>&1 | grep -q 'Logged in to github.com as'
+if gh auth status 2>&1 | grep -q "Logged in to github.com as"
 then
   echo "${GREEN_COLOR}GitHub CLI installed and setup successfully${DEFAULT_COLOR}\n"
 else
-  echo "${RED_COLOR}Couldn't confirm that GitHub CLI got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
+  echo "${RED_COLOR}Could not confirm that GitHub CLI got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
 fi
 
 echo "Installing NVM:\n"
@@ -200,12 +202,12 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 # / copied block
 
-# Not able to test NVM proper installation, the following commented code won't work, not sure why.
-# if nvm --help 2>&1 | grep -q 'Node Version Manager'
+# Not able to test NVM proper installation, the following commented code will not work, not sure why.
+# if nvm --help 2>&1 | grep -q "Node Version Manager"
 # then
-#     echo "${GREEN_COLOR}NVM v$(nvm --help 2>&1 | grep 'Node Version Manager') installed successfully${DEFAULT_COLOR}\n"
+#     echo "${GREEN_COLOR}NVM v$(nvm --help 2>&1 | grep "Node Version Manager") installed successfully${DEFAULT_COLOR}\n"
 # else
-#     echo "${RED_COLOR}Couldn't confirm that NVM got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
+#     echo "${RED_COLOR}Could not confirm that NVM got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
 #     exit
 # fi
 
@@ -214,11 +216,11 @@ echo "Installing Node:\n"
 nvm install 16
 # / copied block
 
-if node -v | grep -q 'v16.'
+if node -v | grep -q "v16."
 then
-    echo "${GREEN_COLOR}Node v$(node -v) installed successfully${DEFAULT_COLOR}\n"
+    echo "${GREEN_COLOR}Node $(node -v) installed successfully${DEFAULT_COLOR}\n"
 else
-    echo "${RED_COLOR}Couldn't confirm that Node got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
+    echo "${RED_COLOR}Could not confirm that Node got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
     exit
 fi
 
@@ -232,7 +234,7 @@ if yarn -v | grep -q ''
 then
     echo "${GREEN_COLOR}Yarn v$(yarn -v) installed successfully${DEFAULT_COLOR}\n"
 else
-    echo "${RED_COLOR}Couldn't confirm that Yarn got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
+    echo "${RED_COLOR}Could not confirm that Yarn got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
     exit
 fi
 
@@ -242,15 +244,15 @@ echo "Installing Heroku CLI:\n"
 brew tap heroku/brew && brew install heroku
 # / copied block
 
-if heroku -v | grep -q 'heroku/'
+if heroku -v | grep -q "heroku/"
 then
     echo "${GREEN_COLOR}Heroku v$(heroku -v | cut -f1 -d' ') installed successfully${DEFAULT_COLOR}\n"
 else
-    echo "${RED_COLOR}Couldn't confirm that Heroku got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
+    echo "${RED_COLOR}Could not confirm that Heroku got properly installed, closing now. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
     exit
 fi
 
-echo "Some people like 'oh-my-zsh' to improve their terminal usage experience."
+echo "Some people like "oh-my-zsh" to improve their terminal usage experience."
 
 PS3="Would you like to install it? "
 options=("Sure" "Nah")
@@ -258,24 +260,26 @@ select option in "${options[@]}"
 do
   case $option in
     "Sure")
-      echo "Ok, let's get it installed then."
+      echo "Ok, installing it."
       # Copied block from https://ohmyz.sh/
       sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
       # / copied block
-      if cat ~/.zshrc | grep -m1 'oh-my-zsh'
+      if cat ~/.zshrc | grep -m1 "oh-my-zsh"
       then
-        echo "${GREEN_COLOR}$(cat ~/.zshrc | grep -m1 'oh-my-zsh') installed successfully${DEFAULT_COLOR}\n"
+        echo "${GREEN_COLOR}$(cat ~/.zshrc | grep -m1 \"oh-my-zsh\") installed successfully${DEFAULT_COLOR}\n"
       else
-        echo "${RED_COLOR}Couldn't confirm that oh-my-zsh got properly installed, since this is not mandatory we'll continue. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
+        echo "${RED_COLOR}Could not confirm that oh-my-zsh got properly installed, since this is not mandatory we will continue. Please notify @Alejandro on Slack for this to be fixed.${DEFAULT_COLOR}\n"
       fi
       break
       ;;
     "Nah")
-      echo "¯\_(ツ)_/¯ Welp, let's continue then."
+      echo "¯\_(ツ)_/¯ Welp, continuing then."
       break
       ;;
     *) echo "invalid option $REPLY";;
   esac
 done
 
-printf "${GREEN_COLOR}We're done, that wasn't too painful, was it? Now look for specifics on your project. Hope you have a great onboarding and adventure here at Nuvocargo!${DEFAULT_COLOR}"
+printf "${GREEN_COLOR}We are done, that was not too painful, was it? Now look for specifics on your project. Hope you have a great onboarding and adventure here at Nuvocargo!${DEFAULT_COLOR}"
+
+'
