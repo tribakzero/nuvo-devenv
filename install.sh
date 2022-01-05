@@ -265,6 +265,7 @@ do
 
       echo "Running post-install commands...\n"
 
+      echo "\n\n# Copied from the original .zshrc\n" >> ~/.zshrc
       cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
 
       if cat ~/.zshrc | grep -m1 "oh-my-zsh"
