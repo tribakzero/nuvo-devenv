@@ -43,8 +43,6 @@ else
     exit
 fi
 
-: '
-
 echo "There are a lot of IDEs, here we have some for you to pick."
 
 PS3="Would you like one of these? "
@@ -264,6 +262,11 @@ do
       # Copied block from https://ohmyz.sh/
       sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
       # / copied block
+
+      echo "Running post-install commands...\n"
+
+      cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
+
       if cat ~/.zshrc | grep -m1 "oh-my-zsh"
       then
         echo "${GREEN_COLOR}$(cat ~/.zshrc | grep -m1 \"oh-my-zsh\") installed successfully${DEFAULT_COLOR}\n"
@@ -281,5 +284,3 @@ do
 done
 
 printf "${GREEN_COLOR}We are done, that was not too painful, was it? Now look for specifics on your project. Hope you have a great onboarding and adventure here at Nuvocargo!${DEFAULT_COLOR}"
-
-'
