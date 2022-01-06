@@ -6,6 +6,7 @@ ERROR_ADVICE="Please notify @Alejandro on Slack for this to be fixed."
 printf "%40s\n" "Welcome $USER to ${GREEN}Nuvocargo${NORMAL}'s Automated Dev Environment Setup Installer\n
 What are we're doing to your pristine machine, you ask?\n
 Sure, take a look at the tasks:\n
+  - Install xcode (to prevent issues with permissions)
   - Install Rosetta (For M1 compatibility, it validates the right architecture)
   • Install Brew (Package Manager to quickly setup everything else)
   • Install an IDE (optional)
@@ -22,6 +23,15 @@ Sure, take a look at the tasks:\n
 printf "%40s\n" "${YELLOW}"
 read -r -n 1 -p "Are you ready? Press 'any key' ('any key' is near that 'other key')... "
 printf "%40s\n" "${NORMAL}"
+
+if xcode-select --install | grep -q -m1 'already installed'
+then
+    printf "Skipping xcode install\n"
+else
+    printf "Installing xcode\n"
+    xcode-select --install
+    exit
+fi
 
 if [[ $(uname -p) == 'arm' ]]; then
   printf "Check found M1 Processor, installing Rosetta 2"
